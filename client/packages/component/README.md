@@ -1,6 +1,6 @@
 # component
 
-> Awesome UI Library made with &lt;3 by CompareKaro & Anshuman Mohapatra
+> Awesome UI Library made with &lt;3 by Anshuman Mohapatra
 
 [![NPM](https://img.shields.io/npm/v/component.svg)](https://www.npmjs.com/package/component) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -30,4 +30,4 @@ class Example extends Component {
 
 ## License
 
-MIT © [CompareKaro](https://github.com/CompareKaro/comparekaro-fe.git)
+MIT © [amohapatra123](https://github.com/amohapatra123/Chat_Go/)
