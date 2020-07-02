@@ -33,8 +33,6 @@
     "run:frontend": "yarn workspace frontend start",
     "run:storybook": "yarn workspace storybook start",
     "run:component": "yarn workspace component start",
-    "build:frontend": "yarn workspace frontend build",
-    "build:component": "yarn workspace component pre:build",
     "test:frontend": "yarn workspace frontend test",
     "test:component": "yarn workspace component test",
     "run:library": "concurrently \"yarn run:component\" \"yarn run:storybook\"",
