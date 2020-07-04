@@ -8,40 +8,26 @@ const PassRegex = RegExp(
 );
 
 router.post("/register", (req, res) => {
-  const { name, email, phone, username, password, password2 } = req.body;
+  const { name, phone, password, password2 } = req.body;
   const newUser = new User({
     name,
-    email,
+
     phone,
-    username,
+
     password,
   });
 
-  formValidate(name, email, phone, username, password, password2, req, res);
+  formValidate(name, phone, password, password2, req, res);
 });
 
-formValidate = (
-  name,
-  email,
-  phone,
-  username,
-  password,
-  password2,
-  req,
-  res
-) => {
+//form validation
+formValidate = (name, phone, password, password2, req, res) => {
   let errors = [];
   if (!name) {
     errors.push({ msg: "Name cannot be empty." });
   }
-  if (!email) {
-    errors.push({ msg: "Email cannot be empty." });
-  }
   if (!phone) {
     errors.push({ msg: "Phone Number cannot be empty." });
-  }
-  if (!username) {
-    errors.push({ msg: "Username cannot be empty." });
   }
   if (!password) {
     errors.push({ msg: "Password cannot be empty." });
@@ -70,7 +56,25 @@ formValidate = (
   }
   if (errors.length > 0) {
     res.send(errors);
+  } else {
+    userExistance(phone, req, res);
   }
 };
 
+//validating user existance
+userExistance = (phone, req, res) => {
+  let error = [];
+  User.findOne({ phone: phone }, (err, user) => {
+    if (err) {
+      res.send(err);
+    } else if (user) {
+      console.log(user);
+    } else {
+      res.redirect("/user/login");
+    }
+  });
+  if (error.length > 0) {
+    res.send(error);
+  }
+};
 module.exports = router;

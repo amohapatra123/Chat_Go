@@ -14,6 +14,7 @@ mongoose
 
 //Import Area
 const register = require("./routes/register");
+const login = require("./routes/login");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!!!");
 });
 app.use("/user", register);
+app.use("/user", login);
 const server = http.createServer(app);
 server.listen(PORT, () => {
   console.log(`server is running on localhost:${PORT}`);
