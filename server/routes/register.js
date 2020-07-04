@@ -46,18 +46,23 @@ formValidate = (
   if (!password) {
     errors.push({ msg: "Password cannot be empty." });
   }
-  if (!PassRegex.test(password)) {
-    if (password.length < 8) {
-      errors.push({
-        msg:
-          "Password must be alphanumeric,with atleat one special character and must be min of 8 charecters",
-      });
-    }
-    if (password.length > 15) {
-      errors.push({
-        msg:
-          "Password must be alphanumeric,with atleat one special character and must be max of 15 charecters",
-      });
+  if (!password2) {
+    errors.push({ msg: "Confirm Password cannot be empty." });
+  }
+  if (password) {
+    if (!PassRegex.test(password)) {
+      if (password.length > 0 && password.length < 8) {
+        errors.push({
+          msg:
+            "Password must be alphanumeric,with atleat one special character and must be min of 8 charecters",
+        });
+      }
+      if (password.length > 15) {
+        errors.push({
+          msg:
+            "Password must be alphanumeric,with atleat one special character and must be max of 15 charecters",
+        });
+      }
     }
   }
   if (password2 !== password) {
