@@ -2,8 +2,6 @@
 
 ## Made With
 
----
-
 - **React**
 - **Node.js**
 - **Socket.io**
