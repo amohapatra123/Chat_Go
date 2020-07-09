@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const User = require("../models/users");
 const PassRegex = RegExp(
@@ -16,6 +17,9 @@ router.post("/register", (req, res) => {
   });
 
   if (formValidate(name, phone, password, password2, req, res)) {
+    bcrypt.hash(newUser.password, 10, (err, hash) => {
+      newUser.password = hash;
+    });
     let errors = [];
 
     User.findOne({ phone: phone }, (err, user) => {
@@ -24,7 +28,7 @@ router.post("/register", (req, res) => {
       }
       if (user) {
         errors.push({ msg: "Phone Number already exists." });
-        res.send(errors);
+        res.send(user);
       } else {
         newUser.save();
         res.status(200).send("Successfully Registered.");
