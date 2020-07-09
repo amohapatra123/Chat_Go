@@ -4,43 +4,43 @@ const mongoose = require("mongoose");
 
 const User = require("../models/users");
 const PassRegex = RegExp(
-  "/^(?=.*[a-z])(?=.*[A-Z])(?=.*d)(?=.*[$@$!%*?&])[A-Za-zd$@$!%*?&]{8,15}$/"
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{8,15}$/
 );
 
 router.post("/register", (req, res) => {
-  const { name, email, phone, username, password, password2 } = req.body;
+  const { name, phone, password, password2 } = req.body;
   const newUser = new User({
     name,
     phone,
     password,
   });
 
-  formValidate(name, email, phone, username, password, password2, req, res);
+  if (formValidate(name, phone, password, password2, req, res)) {
+    let errors = [];
+
+    User.findOne({ phone: phone }, (err, user) => {
+      if (err) {
+        console.log(err);
+      }
+      if (user) {
+        errors.push({ msg: "Phone Number already exists." });
+        res.send(errors);
+      } else {
+        newUser.save();
+        res.status(200).send("Successfully Registered.");
+      }
+    });
+  }
 });
 
 //form validation
-formValidate = (
-  name,
-  email,
-  phone,
-  username,
-  password,
-  password2,
-  req,
-  res
-) => {
+formValidate = (name, phone, password, password2, req, res) => {
   let errors = [];
   if (!name) {
     errors.push({ msg: "Name cannot be empty." });
   }
-  if (!email) {
-    errors.push({ msg: "Email cannot be empty." });
-  }
   if (!phone) {
     errors.push({ msg: "Phone Number cannot be empty." });
-  }
-  if (!username) {
-    errors.push({ msg: "Username cannot be empty." });
   }
   if (!password) {
     errors.push({ msg: "Password cannot be empty." });
@@ -56,10 +56,10 @@ formValidate = (
             "Password must be alphanumeric,with atleat one special character and must be min of 8 charecters",
         });
       }
-      if (password.length >= 8) {
+      if (password.length > 8 && password.length < 15) {
         errors.push({
           msg:
-            "Password must be alphanumeric, with atleast one special character nad must be min of 8 charecter and max of 15 characters",
+            "Password must be alphanumeric, with atleast one special character and must be min of 8 charecter and max of 15 characters",
         });
       }
       if (password.length > 15) {
@@ -76,10 +76,8 @@ formValidate = (
   if (errors.length > 0) {
     res.send(errors);
   } else {
-    res.send("ok");
+    return true;
   }
 };
-
-//validating user existance
 
 module.exports = router;
