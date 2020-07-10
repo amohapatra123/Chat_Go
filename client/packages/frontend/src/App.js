@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Loader from "./Components/Loader";
 import "component/dist/main.css";
+import "component/src/assets/css/paper-kit.css";
 import { routes } from "./Routes/Route";
 
 function App() {
