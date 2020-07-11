@@ -68,31 +68,36 @@ export default class signUp extends PureComponent {
       password,
       password2,
     };
-
+    if ((message.length = 0)) {
+      this.setState({ message: null }); //making the array empty for each click of the button.
+    }
     axios
       .post(`http://localhost:5000/user/register`, { request })
       .then((res) => {
         console.log(res);
         res.data.map((msg) => {
-          return message.push({ msg: msg.msg });
+          return this.setState({ message: [...this.state.message, msg.msg] });
         });
+        console.log(message);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  showErrors = () => {
-    const { message } = this.state;
-    message.map((msg) => {
-      return `${msg.msg}`;
-    });
+  renderError = (message) => {
+    const error = (
+      <ul className="list-unstyled">
+        {message.map((msg, index) => {
+          return <li key={index}>{msg}</li>;
+        })}
+      </ul>
+    );
+    return error;
   };
 
   render() {
-    const { message, name } = this.state;
-    const error = message.map((msg) => {
-      return <div>{`${msg.msg}`}</div>;
-    });
+    const { message } = this.state;
+
     return (
       <Container>
         <Row className="mt-5">
@@ -106,7 +111,7 @@ export default class signUp extends PureComponent {
                 </Col>
               </Row>
               <CardBody>
-                <Row>{message.length > 0 ? error : null}</Row>
+                <Row>{this.renderError(message)}</Row>
                 <Row>{this.renderform()}</Row>
                 <Row>
                   <Col md={{ size: 12 }}>
