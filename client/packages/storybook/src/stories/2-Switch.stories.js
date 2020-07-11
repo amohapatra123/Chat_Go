@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/index.css";
 import "component/dist/main.css";
+import "component/src/assets/css/paper-kit.css";
 import { PaperSwitch } from "component";
 export default {
   title: "Paper Kit Switch",
