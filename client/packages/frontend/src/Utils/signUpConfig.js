@@ -13,7 +13,7 @@ export const form = [
   },
   {
     id: 2,
-    type: "text",
+    type: "number",
     name: "phone",
     placeholder: "Phone Number",
   },

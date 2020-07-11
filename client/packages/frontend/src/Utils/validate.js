@@ -5,7 +5,7 @@ export function handlechange(name, value, formErrors, password) {
     name:
       value.length < 3 && value.length > 0
         ? "Minimum 3 characters required"
-        : value.length > 15
+        : value.length > 20
         ? "Maximum 20 characters required"
         : "",
     email:
