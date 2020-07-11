@@ -4,81 +4,92 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/users");
+const { request } = require("express");
 const PassRegex = RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{8,15}$/
 );
-
+const EmailRegex = RegExp(
+  /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
+);
 router.post("/register", (req, res) => {
-  const { name, phone, password, password2 } = req.body;
+  const { name, email, phone, password, password2 } = req.body.request;
   const newUser = new User({
     name,
+    email,
     phone,
     password,
   });
 
-  if (formValidate(name, phone, password, password2, req, res)) {
+  if (formValidate(name, email, phone, password, password2, req, res)) {
     bcrypt.hash(newUser.password, 10, (err, hash) => {
       newUser.password = hash;
     });
-    let errors = [];
+    let message = [];
 
     User.findOne({ phone: phone }, (err, user) => {
       if (err) {
         console.log(err);
       }
       if (user) {
-        errors.push({ msg: "Phone Number already exists." });
-        res.send(user);
+        message.push({ msg: "Phone Number already exists.", code: 400 });
+        res.send(message);
       } else {
         newUser.save();
-        res.status(200).send("Successfully Registered.");
+        message.push({ msg: "Successfully Registered", code: 200 });
+        res.send(message);
       }
     });
   }
 });
 
 //form validation
-formValidate = (name, phone, password, password2, req, res) => {
-  let errors = [];
+formValidate = (name, email, phone, password, password2, req, res) => {
+  let message = [];
   if (!name) {
-    errors.push({ msg: "Name cannot be empty." });
+    message.push({ msg: "Name cannot be empty.", code: 401 });
+  }
+  if (!email) {
+    message.push({ msg: "Email cannot be empty.", code: 401 });
   }
   if (!phone) {
-    errors.push({ msg: "Phone Number cannot be empty." });
+    message.push({ msg: "Phone Number cannot be empty.", code: 401 });
   }
   if (!password) {
-    errors.push({ msg: "Password cannot be empty." });
+    message.push({ msg: "Password cannot be empty.", code: 401 });
   }
   if (!password2) {
-    errors.push({ msg: "Confirm Password cannot be empty." });
+    message.push({ msg: "Confirm Password cannot be empty.", code: 401 });
   }
   if (password) {
     if (!PassRegex.test(password)) {
       if (password.length > 0 && password.length < 8) {
-        errors.push({
+        message.push({
           msg:
             "Password must be alphanumeric,with atleat one special character and must be min of 8 charecters",
+          code: 401,
         });
       }
       if (password.length > 8 && password.length < 15) {
-        errors.push({
+        message.push({
           msg:
             "Password must be alphanumeric, with atleast one special character and must be min of 8 charecter and max of 15 characters",
+          code: 401,
         });
       }
       if (password.length > 15) {
-        errors.push({
+        message.push({
           msg:
             "Password must be alphanumeric,with atleat one special character and must be max of 15 charecters",
+          code: 401,
         });
       }
     }
   }
   if (password2 !== password) {
-    errors.push({ msg: "Passwords donot match" });
+    message.push({ msg: "Passwords donot match", code: 401 });
   }
-  if (errors.length > 0) {
-    res.send(errors);
+  if (message.length > 0) {
+    res.send(message);
   } else {
     return true;
   }

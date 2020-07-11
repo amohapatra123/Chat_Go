@@ -3,9 +3,9 @@ import { PaperButton, PaperInput } from "component";
 import { form } from "../Utils/loginConfig";
 import { Link } from "react-router-dom";
 import { CardBody, Container, Row, Col } from "reactstrap";
-import "../Styles/form.css";
 import { handlechange, handledanger, handlesuccess } from "../Utils/validate";
-
+import axios from "axios";
+import "../Styles/form.css";
 export default class Login extends PureComponent {
   state = {
     phone: null,
@@ -14,6 +14,7 @@ export default class Login extends PureComponent {
       phone: "",
       password: "",
     },
+    message: [],
   };
   handlechange = (e) => {
     const { name, value } = e.target;
@@ -46,11 +47,43 @@ export default class Login extends PureComponent {
       );
     });
   };
+
   handleclick = () => {
-    console.log(this.state);
+    const { phone, password, message } = this.state;
+    const request = {
+      phone,
+      password,
+    };
+    if ((message.length = 0)) {
+      this.setState({ message: null }); //making the array empty for each click of the button.
+    }
+    axios
+      .post(`http://localhost:5000/user/login`, { request })
+      .then((res) => {
+        console.log(res);
+        res.data.map((msg) => {
+          return this.setState({
+            message: [...this.state.message, msg.msg],
+          });
+        });
+        console.log(message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  renderError = (message) => {
+    const error = (
+      <ul className="list-unstyled">
+        {message.map((msg, index) => {
+          return <li key={index}>{msg}</li>;
+        })}
+      </ul>
+    );
+    return error;
   };
   render() {
-    const { email, password } = this.state;
+    const { message } = this.state;
     return (
       <Container>
         <Row className="mt-5">
@@ -64,6 +97,7 @@ export default class Login extends PureComponent {
                 </Col>
               </Row>
               <CardBody>
+                <Row>{this.renderError(message)}</Row>
                 <Row>{this.renderform()}</Row>
                 <Row>
                   <Col md={{ size: 12 }}>
