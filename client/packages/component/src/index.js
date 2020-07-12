@@ -9,3 +9,6 @@ export * from './PaperInput';
 
 export { default as PaperSwitch } from './PaperSwitch';
 export * from './PaperSwitch';
+
+export { default as PaperNotification } from './PaperNotification';
+export * from './PaperNotification';
