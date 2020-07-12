@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const User = require("../models/users");
-const { request } = require("express");
+
 const PassRegex = RegExp(
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@$!%*?&]).{8,15}$/
 );
@@ -85,8 +85,10 @@ formValidate = (name, email, phone, password, password2, req, res) => {
       }
     }
   }
-  if (password2 !== password) {
-    message.push({ msg: "Passwords donot match", code: 401 });
+  if (password2) {
+    if (password2 !== password) {
+      message.push({ msg: "Passwords donot match", code: 401 });
+    }
   }
   if (message.length > 0) {
     res.send(message);

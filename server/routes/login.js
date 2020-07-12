@@ -7,7 +7,7 @@ const User = require("../models/users");
 const { request } = require("express");
 router.post("/login", (req, res) => {
   const { phone, password } = req.body.request;
-  if (formValidate(phone, password, req, res)) {
+  if (loginValidate(phone, password, req, res)) {
     let message = [];
     User.findOne({ phone: phone }, (err, user) => {
       if (err) {
@@ -37,7 +37,7 @@ router.post("/login", (req, res) => {
   }
 });
 //form validate
-formValidate = (phone, password, req, res) => {
+loginValidate = (phone, password, req, res) => {
   let message = [];
   if (!phone) {
     message.push({ msg: "Enter Phone Number", code: 401 });

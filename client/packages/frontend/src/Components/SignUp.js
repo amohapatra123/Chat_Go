@@ -78,7 +78,6 @@ export default class signUp extends PureComponent {
         res.data.map((msg) => {
           return this.setState({ message: [...this.state.message, msg.msg] });
         });
-        console.log(message);
       })
       .catch((err) => {
         console.log(err);
