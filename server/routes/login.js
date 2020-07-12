@@ -19,18 +19,21 @@ router.post("/login", (req, res) => {
             console.log(err);
           }
           if (result == true) {
-            message.push({ msg: "Correct Credentials", code: 200 });
+            message.push({ msg: "Correct Credentials", code: "success" });
             res.send(message);
           } else {
             message.push({
               msg: "Incorrect Password",
-              code: 401,
+              code: "danger",
             });
             res.send(message);
           }
         });
       } else {
-        message.push({ msg: "Invalid Phone Number and Password", code: 400 });
+        message.push({
+          msg: "Invalid Phone Number and Password",
+          code: "danger",
+        });
         res.send(message);
       }
     });
@@ -40,10 +43,10 @@ router.post("/login", (req, res) => {
 loginValidate = (phone, password, req, res) => {
   let message = [];
   if (!phone) {
-    message.push({ msg: "Enter Phone Number", code: 401 });
+    message.push({ msg: "Enter Phone Number", code: "warning" });
   }
   if (!password) {
-    message.push({ msg: "Enter Password", code: 401 });
+    message.push({ msg: "Enter Password", code: "warning" });
   }
   if (message.length > 0) {
     res.send(message);
