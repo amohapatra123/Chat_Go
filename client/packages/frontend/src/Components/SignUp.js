@@ -74,11 +74,9 @@ export default class signUp extends PureComponent {
     axios
       .post(`http://localhost:5000/user/register`, { request })
       .then((res) => {
-        console.log(res);
         res.data.map((msg) => {
           return this.setState({ message: [...this.state.message, msg] });
         });
-        console.log(message);
       })
       .catch((err) => {
         console.log(err);
