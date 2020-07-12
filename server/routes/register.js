@@ -31,11 +31,11 @@ router.post("/register", (req, res) => {
         console.log(err);
       }
       if (user) {
-        message.push({ msg: "Phone Number already exists.", code: 400 });
+        message.push({ msg: "Phone Number already exists.", code: "danger" });
         res.send(message);
       } else {
         newUser.save();
-        message.push({ msg: "Successfully Registered", code: 200 });
+        message.push({ msg: "Successfully Registered", code: "success" });
         res.send(message);
       }
     });
@@ -46,19 +46,19 @@ router.post("/register", (req, res) => {
 formValidate = (name, email, phone, password, password2, req, res) => {
   let message = [];
   if (!name) {
-    message.push({ msg: "Name cannot be empty.", code: 401 });
+    message.push({ msg: "Name cannot be empty.", code: "warning" });
   }
   if (!email) {
-    message.push({ msg: "Email cannot be empty.", code: 401 });
+    message.push({ msg: "Email cannot be empty.", code: "warning" });
   }
   if (!phone) {
-    message.push({ msg: "Phone Number cannot be empty.", code: 401 });
+    message.push({ msg: "Phone Number cannot be empty.", code: "warning" });
   }
   if (!password) {
-    message.push({ msg: "Password cannot be empty.", code: 401 });
+    message.push({ msg: "Password cannot be empty.", code: "warning" });
   }
   if (!password2) {
-    message.push({ msg: "Confirm Password cannot be empty.", code: 401 });
+    message.push({ msg: "Confirm Password cannot be empty.", code: "warning" });
   }
   if (password) {
     if (!PassRegex.test(password)) {
@@ -66,28 +66,28 @@ formValidate = (name, email, phone, password, password2, req, res) => {
         message.push({
           msg:
             "Password must be alphanumeric,with atleat one special character and must be min of 8 charecters",
-          code: 401,
+          code: "warning",
         });
       }
       if (password.length > 8 && password.length < 15) {
         message.push({
           msg:
             "Password must be alphanumeric, with atleast one special character and must be min of 8 charecter and max of 15 characters",
-          code: 401,
+          code: "warning",
         });
       }
       if (password.length > 15) {
         message.push({
           msg:
             "Password must be alphanumeric,with atleat one special character and must be max of 15 charecters",
-          code: 401,
+          code: "warning",
         });
       }
     }
   }
   if (password2) {
     if (password2 !== password) {
-      message.push({ msg: "Passwords donot match", code: 401 });
+      message.push({ msg: "Passwords donot match", code: "warning" });
     }
   }
   if (message.length > 0) {

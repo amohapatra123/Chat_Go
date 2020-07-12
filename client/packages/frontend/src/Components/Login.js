@@ -1,5 +1,5 @@
 import React, { PureComponent } from "react";
-import { PaperButton, PaperInput } from "component";
+import { PaperButton, PaperInput, PaperNotification } from "component";
 import { form } from "../Utils/loginConfig";
 import { Link } from "react-router-dom";
 import { CardBody, Container, Row, Col } from "reactstrap";
@@ -63,7 +63,7 @@ export default class Login extends PureComponent {
         console.log(res);
         res.data.map((msg) => {
           return this.setState({
-            message: [...this.state.message, msg.msg],
+            message: [...this.state.message, msg],
           });
         });
         console.log(message);
@@ -76,7 +76,11 @@ export default class Login extends PureComponent {
     const error = (
       <ul className="list-unstyled">
         {message.map((msg, index) => {
-          return <li key={index}>{msg}</li>;
+          return (
+            <li key={index}>
+              <PaperNotification color={msg.code} text={msg.msg} dismiss />
+            </li>
+          );
         })}
       </ul>
     );
@@ -97,7 +101,9 @@ export default class Login extends PureComponent {
                 </Col>
               </Row>
               <CardBody>
-                <Row>{this.renderError(message)}</Row>
+                <Row>
+                  <Col>{this.renderError(message)}</Col>
+                </Row>
                 <Row>{this.renderform()}</Row>
                 <Row>
                   <Col md={{ size: 12 }}>
