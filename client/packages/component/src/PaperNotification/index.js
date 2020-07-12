@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Alert } from 'reactstrap';
+import { UncontrolledAlert, Alert } from 'reactstrap';
 
-export function PaperNotification(props) {
-  const { color, text, isOpen, toogle, fade } = props;
-  return (
-    <React.Fragment>
-      <Alert color={color} isOpen={isOpen} toogle={toogle} fade={fade}>
-        {text}
-      </Alert>
-    </React.Fragment>
-  );
+const controled = ({ color, text }) => {
+  return <Alert color={color}>{text}</Alert>;
+};
+const uncontroled = ({ color, text }) => {
+  return <UncontrolledAlert color={color}>{text}</UncontrolledAlert>;
+};
+function renderComponent(props) {
+  const { color, text, simple, dismiss } = props;
+  if (simple) return controled(props);
+  else if (dismiss) return uncontroled(props);
 }
-PaperInput.propTypes = {
+export function PaperNotification(props) {
+  const { color, text, simple, dismiss } = props;
+  return <React.Fragment>{renderComponent(props)}</React.Fragment>;
+}
+PaperNotification.propTypes = {
   color: PropTypes.oneOf([
     'primary',
     'secondary',
@@ -21,13 +26,10 @@ PaperInput.propTypes = {
     'danger'
   ]),
   text: PropTypes.string,
-  isOpen: PropTypes.bool,
-  toogle: PropTypes.func,
-  fade: PropTypes.bool
+  simple: PropTypes.bool,
+  dismiss: PropTypes.bool
 };
-PaperInput.defaultProps = {
-  color: 'warning',
-  isOpen: true,
-  fade: true
+PaperNotification.defaultProps = {
+  color: 'warning'
 };
 export default PaperNotification;
