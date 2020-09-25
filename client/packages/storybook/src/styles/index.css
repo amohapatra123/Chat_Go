@@ -1,7 +1,0 @@
-.row {
-  display: flex;
-}
-.row > * {
-  flex: 0.15;
-  margin: 2em 1.5em;
-}
